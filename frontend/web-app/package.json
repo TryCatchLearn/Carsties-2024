@@ -11,6 +11,7 @@
   "dependencies": {
     "flowbite-react": "^0.10.1",
     "next": "14.2.5",
+    "next-auth": "^5.0.0-beta.20",
     "query-string": "^9.1.0",
     "react": "^18",
     "react-countdown": "^2.3.6",
