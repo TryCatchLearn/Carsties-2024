@@ -1,6 +1,6 @@
 import { auth } from '@/auth';
 
-const baseUrl = 'http://localhost:6001/';
+const baseUrl = process.env.API_URL;
 
 async function get(url: string) {
     const requestOptions = {

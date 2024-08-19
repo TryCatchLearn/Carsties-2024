@@ -9,7 +9,8 @@ const nextConfig = {
         remotePatterns: [
             {protocol: 'https', hostname: 'cdn.pixabay.com'}
         ]
-    }
+    },
+    output: 'standalone'
 };
 
 export default nextConfig;
