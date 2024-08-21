@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identity-svc
+spec:
+  selector:
+    matchLabels:
+      app: identity-svc
+  template:
+    metadata:
+      labels:
+        app: identity-svc
+    spec:
+      containers:
+      - name: identity-svc
+        image: trycatchlearn/identity-svc:latest
+        env:
+          - name: ConnectionStrings__DefaultConnection
+            valueFrom:
+              secretKeyRef:
+                name: identity-secret
+                key: connString
+        envFrom:
+          - configMapRef:
+              name: identity-svc-config
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: identity-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: identity-svc
+  ports:
+  - port: 80
+    targetPort: 80
+

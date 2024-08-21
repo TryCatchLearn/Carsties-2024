@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notify-svc
+spec:
+  selector:
+    matchLabels:
+      app: notify-svc
+  template:
+    metadata:
+      labels:
+        app: notify-svc
+    spec:
+      containers:
+      - name: notify-svc
+        image: trycatchlearn/notify-svc:latest
+        env:
+          - name: RabbitMQ__Username
+            valueFrom:
+              secretKeyRef:
+                name: rabbit-secret
+                key: username
+          - name: RabbitMQ__Password
+            valueFrom:
+              secretKeyRef:
+                name: rabbit-secret
+                key: password
+        envFrom:
+          - configMapRef:
+              name: notify-svc-config
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notify-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: notify-svc
+  ports:
+  - port: 80
+    targetPort: 80
+

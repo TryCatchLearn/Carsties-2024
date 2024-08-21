@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bid-svc
+spec:
+  selector:
+    matchLabels:
+      app: bid-svc
+  template:
+    metadata:
+      labels:
+        app: bid-svc
+    spec:
+      containers:
+      - name: bid-svc
+        image: trycatchlearn/bid-svc:latest
+        env:
+          - name: ConnectionStrings__BidDbConnection
+            valueFrom:
+              secretKeyRef:
+                name: bid-secret
+                key: connString
+          - name: RabbitMQ__Username
+            valueFrom:
+              secretKeyRef:
+                name: rabbit-secret
+                key: username
+          - name: RabbitMQ__Password
+            valueFrom:
+              secretKeyRef:
+                name: rabbit-secret
+                key: password
+        envFrom:
+          - configMapRef:
+              name: bid-svc-config
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bid-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: bid-svc
+  ports:
+  - port: 80
+    targetPort: 80
+

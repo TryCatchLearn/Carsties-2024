@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auction-svc-config
+data:
+  ASPNETCORE_URLS: http://+:80;http://+:7777
+  RabbitMQ__Host: rabbit-clusterip
+  IdentityServiceUrl: http://identity-clusterip
+  Kestrel__Endpoints__Grpc__Protocols: Http2
+  Kestrel__Endpoints__Grpc__Url: http://+:7777
+  Kestrel__Endpoints__WebApi__Protocols: Http1
+  Kestrel__Endpoints__WebApi__Url: http://+:80
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: search-svc-config
+data:
+  ASPNETCORE_URLS: http://+:80
+  RabbitMQ__Host: rabbit-clusterip
+  AuctionServiceUrl: http://auction-clusterip
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bid-svc-config
+data:
+  ASPNETCORE_URLS: http://+:80
+  RabbitMQ__Host: rabbit-clusterip
+  IdentityServiceUrl: http://identity-clusterip
+  GrpcAuction: http://auction-clusterip:7777
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notify-svc-config
+data:
+  ASPNETCORE_URLS: http://+:80
+  RabbitMQ__Host: rabbit-clusterip
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-svc-config
+data:
+  ASPNETCORE_URLS: http://+:80
+  ClientApp: https://app.carsties.local
+  IdentityServiceUrl: http://identity-clusterip
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: identity-svc-config
+data:
+  ASPNETCORE_URLS: http://+:80
+  IssuerUri: https://id.carsties.local
+  ClientApp: https://app.carsties.local
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-svc-config
+data:
+  AUTH_URL: https://app.carsties.local
+  AUTH_URL_INTERNAL: http://webapp-clusterip:3000
+  API_URL: http://gateway-clusterip/
+  ID_URL: https://id.carsties.local
+  ID_URL_INTERNAL: http://identity-clusterip
+  NOTIFY_URL: https://api.carsties.local/notifications

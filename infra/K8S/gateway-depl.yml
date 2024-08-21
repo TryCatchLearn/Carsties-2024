@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-svc
+spec:
+  selector:
+    matchLabels:
+      app: gateway-svc
+  template:
+    metadata:
+      labels:
+        app: gateway-svc
+    spec:
+      containers:
+      - name: gateway-svc
+        image: trycatchlearn/gateway-svc:latest
+        envFrom:
+          - configMapRef:
+              name: gateway-svc-config
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: gateway-svc
+  ports:
+  - port: 80
+    targetPort: 80
+
