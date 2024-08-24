@@ -35,7 +35,7 @@ mkcert -install
 cd devcerts
 mkcert -key-file carsties.local.key -cert-file carsties.local.crt app.carsties.local api.carsties.local id.carsties.local
 ```
-8.  You will also need to create an entry in your host file so you can reach the app by its domain name.   Please use this [guide](https://phoenixnap.com/kb/how-to-edit-hosts-file-in-windows-mac-or-linux) if you do not know how to do this.  Create the following entry:
+8.  You will also need to create an entry in your host file so you can reach the app by its domain name.   Please use this [guide](https://www.hostinger.com/tutorials/how-to-edit-hosts-file) if you do not know how to do this.  Create the following entry:
 ```
 127.0.0.1 id.carsties.local app.carsties.local api.carsties.local
 ```
