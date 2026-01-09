@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres
+    image: postgres:16
     environment:
       - POSTGRES_PASSWORD=postgrespw
     ports:
@@ -16,3 +16,29 @@ services:
       - 27017:27017
     volumes:
       - /data/db
+  auction-svc:
+    image: magendi/auction-svc:latest
+    build: 
+      context: .
+      dockerfile: src/AuctionService/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=postgres;User Id=postgres;Password=postgrespw;Database=auctions
+    ports:
+      - 7001:80
+    depends_on:
+      - postgres
+  search-svc:
+    image: magendi/search-svc:latest
+    build:
+      context: .
+      dockerfile: src/SearchService/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__MongoDbConnection=mongodb://root:mongopw@mongodb
+    ports:
+      - 7002:80
+    depends_on:
+      - mongodb
